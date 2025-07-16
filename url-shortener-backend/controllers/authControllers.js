@@ -20,7 +20,18 @@ export const registerUser = async (req, res) => {
       [email, hashedPassword]
     );
 
-    res.status(201).json({ message: 'User registered', user: result.rows[0] });
+    const user = result.rows[0];
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, {
+      expiresIn: '7d',
+    });
+
+    res.status(201).json({
+      message: 'User registered',
+      user,
+      token,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server error' });

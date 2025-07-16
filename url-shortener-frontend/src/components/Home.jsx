@@ -2,6 +2,7 @@ import React from "react";
 import NavBar from "./NavBar";
 import { motion } from 'framer-motion';
 import FeatureSlideshow from "./FeatureSlideShow";
+import Url from "./Url";
 
 const Home = () => {
     return (
@@ -33,7 +34,7 @@ const Home = () => {
             <FeatureSlideshow />
            </div>
          </motion.div>
-
+         <Url />
         </>
     )
 };

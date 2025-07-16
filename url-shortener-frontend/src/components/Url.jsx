@@ -2,15 +2,15 @@ import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import axios from 'axios';
-import  {useAuth} from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
+
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
-
-const colors = ['#11b37dff', '#de2424ff'];
+const colors = ['#00C49F', '#FF4C4C'];
 
 const Url = () => {
-  // Mocked security score data
-  const [data] = useState([
+  const [data,setData] = useState([
     { name: 'Safe', value: 60 },
     { name: 'Suspicious', value: 40 }
   ]);
@@ -23,103 +23,140 @@ const Url = () => {
   const { token } = useAuth();
 
   const handleShorten = async () => {
-    if(!longUrl) return;
+    if (!longUrl) return;
 
     try {
       setLoading(true);
       const res = await axios.post(`${API_BASE}/url/shorten`,
-        { longUrl, length},
+        { longUrl, length },
         {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         }
       );
       setShortUrl(res.data.shortUrl);
       setSecurityScore(res.data.securityScore);
+      setData([
+    { name: 'Safe', value: res.data.securityScore },
+    { name: 'Suspicious', value: 100 - res.data.securityScore }
+  ])
     } catch (err) {
       alert(err?.response?.data?.message || "Something went wrong");
     } finally {
-       setLoading(false);
+      setLoading(false);
     }
   };
 
-    const copyToClipboard = () => {
+const handleRedirect = () => {
+  try {
+    const a = shortUrl.slice(24);
+    console.log(a);
+    const redirectedUrl = `${API_BASE}/url/s/${a}`;
+    window.location.href = redirectedUrl;
+  } catch (err) {
+    console.log("Redirect error:", err);
+  }
+};
+
+
+  const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
-    alert("Copied to clipboard!");
+    toast.success("Copied to Clipboard");
   };
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="max-w-3xl mx-auto my-20 px-10 py-2 border rounded-2xl bg-gradient-to-r from-purple-600 to-purple-400 shadow-lg"
+      className="w-full grid grid-cols-2 gap-30 mx-auto px-6 py-16 mt-20 bg-gradient-to-br from-black via-black to-purple-600"
     >
-      <h2 className="text-3xl text-white font-bold text-gray-800 mb-8">
-        🔗 Shorten a long link
-      </h2>
+      <div className="bg-inherit rounded-3xl p-10 sm:p-30">
+        <h2 className="text-4xl font-bold text-white mb-8 text-center">
+          🔗 Shorten a Long URL Instantly
+        </h2>
 
-      <form className="bg-black text-white p-6 rounded-xl space-y-4">
-        <label className="block text-gray-100 font-medium text-lg">
-          Paste your long link here
-        </label>
-
-        <input
-          type="text"
-          placeholder="https://example.com/long_url"
-          className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-          value={longUrl}
-          onChange={(e) => setLongUrl(e.target.value)}
-        />
-
-        <input
-        type="number"
-        placeholder="Short URL length (default 6)"
-        className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-        value={length}
-        onChange={(e) => setLength(Number(e.target.value))}
-        min={4}
-        max={10}
-      />
-
-        <button
-          onClick={handleShorten}
-          className="px-10 bg-gradient-to-r from-purple-800 to-purple-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition"
-          disabled={loading}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleShorten();
+          }}
+          className="bg-white rounded-xl p-6 sm:p-8 space-y-6 shadow-md max-w-3xl mx-auto"
         >
-         {loading ? "Shortening" : "Get Your Link For Free"}
-        </button>
-      </form>
+          <div>
+            <label className="block text-gray-800 font-medium mb-2">
+              Enter your long URL
+            </label>
+            <input
+              type="text"
+              placeholder="https://example.com/very/long/link"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-800 transition"
+              value={longUrl}
+              onChange={(e) => setLongUrl(e.target.value)}
+              required
+            />
+          </div>
 
-       {shortUrl && (
-        <motion.div
-          className="mt-6 p-4 bg-gray-100 rounded shadow"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <p className="text-lg font-medium">Short URL:</p>
-          <p className="text-blue-600 break-all underline cursor-pointer" onClick={copyToClipboard}>
-            {shortUrl}
-          </p>
+          <div>
+            <label className="block text-gray-800 font-medium mb-2">
+              Short URL Length (optional)
+            </label>
+            <input
+              type="number"
+              placeholder="Length (default 6)"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-400 focus:outline-none text-gray-800 transition"
+              value={length}
+              onChange={(e) => setLength(Number(e.target.value))}
+              min={4}
+              max={10}
+            />
+          </div>
 
-          {securityScore !== null && (
-            <p className={`mt-2 text-sm ${securityScore < 40 ? "text-red-500" : "text-green-600"}`}>
-              Security Score: {securityScore}%
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 font-semibold rounded-lg text-white bg-gradient-to-r from-purple-600 to-purple-500 hover:to-purple-700 transition"
+          >
+            {loading ? "Shortening..." : "Get Your Short Link"}
+          </motion.button>
+        </form>
+
+        {shortUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-8 bg-white rounded-2xl shadow-xl p-6 space-y-4 max-w-2xl mx-auto"
+          >
+            <h3 className="text-xl font-semibold text-gray-800">Your Short URL:</h3>
+            <p
+              className="text-blue-600 text-lg underline cursor-pointer break-all hover:text-blue-800 transition"
+              onClick={copyToClipboard}
+            >
+              {shortUrl}
             </p>
-          )}
-           <button
-        onClick={() => window.location.href = shortUrl}
-        className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800"
-      >
-        Visit Link
-      </button>
-        </motion.div>
-      )}
 
-      <div className="flex flex-col md:flex-row gap-20 mt-20 items-center justify-between">
-        <div className="text-3xl font-semibold text-white">
-          URL Security Score
+            {securityScore !== null && (
+              <p className={`text-sm ${securityScore < 40 ? "text-red-600" : "text-green-600"}`}>
+                Security Score: {securityScore}%
+              </p>
+            )}
+
+            <button
+              onClick={handleRedirect}
+              className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+            >
+              Visit Link
+            </button>
+          </motion.div>
+        )}
+      </div>
+
+      <div className="mt-12 flex lg:flex flex-col items-center justify-between gap-12">
+        <div className="text-white text-4xl font-semibold text-center lg:text-left">
+          🛡️ URL Security Score
         </div>
-        <div>
+        <div className="flex justify-center">
           <PieChart width={300} height={300}>
             <Pie
               data={data}
@@ -137,6 +174,8 @@ const Url = () => {
         </div>
       </div>
     </motion.div>
+      <h2 className='text-xl text-white text-center bg-black'>Made with ❤️ by Sundaram Katare</h2>
+    </>
   );
 };
 

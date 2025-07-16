@@ -32,7 +32,7 @@ export const shortenUrl = async (req, res) => {
         res.status(201).json({
             message: "URL Shortened Successfully",
             shortUrl: `${req.protocol}://${req.get('host')}/s/${shortId}`,
-            score: securityScore,
+            securityScore,
             data: result.rows[0],
         })
     } catch (err) {

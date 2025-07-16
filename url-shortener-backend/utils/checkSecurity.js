@@ -22,8 +22,8 @@ export const checkSecurity = (url) => {
 
         if (score < 0) {
             score = 0;
-            return score;
         }
+         return score;
     } catch {
         return 0; // invalid URL = 0%
     }
