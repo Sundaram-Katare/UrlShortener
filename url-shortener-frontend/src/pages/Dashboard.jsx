@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaHistory } from "react-icons/fa";
 
 const API = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_CLIENT_BASE || "http://localhost:5000";
 
 export default function Dashboard() {
   const { token } = useAuth();
@@ -19,8 +20,8 @@ export default function Dashboard() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUrls(res.data.urls);
-    } catch (err) {
-      alert(err?.response?.data?.message || "Failed to load URLs");
+    } catch (error) {
+      console.error("Error fetching URLs:", error);
     } finally {
       setLoading(false);
     }
@@ -35,62 +36,65 @@ export default function Dashboard() {
     toast.success("Copied to clipboard", {
       duration: 3000,
       style: {
-        background: '#002156ff', // Tailwind's blue-500
+        background: '#002156',
         color: 'white',
-        fontSize: '1.25rem', // Large text
+        fontSize: '1.25rem',
         textAlign: 'center',
         padding: '1rem 2rem',
       },
-      position: 'top-center', // Centered at the top
+      position: 'top-center',
     });
-
   };
 
   return (
     <>
       <Navbar />
-      <div className="max-w-4xl mx-auto mt-8 p-4 ">
-        <h2 className="text-3xl font-bold text-center mb-6 flex"><FaHistory className="mr-10" /> Your Shortened URLs</h2>
+      <div className="max-w-5xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-center mb-8 flex justify-center items-center gap-4 flex-wrap text-blue-900">
+          <FaHistory size={28} /> Your Shortened URLs
+        </h2>
 
         {loading ? (
           <p className="text-center text-gray-500">Loading...</p>
         ) : urls.length === 0 ? (
           <p className="text-center text-gray-500">No URLs created yet.</p>
         ) : (
-          <div className="space-y-4">
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
             {urls.map((url, i) => (
               <motion.div
-                key={url.id}
+                key={url._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="bg-white shadow-md p-4 rounded"
+                className="bg-white shadow-lg p-5 rounded-xl border border-gray-200 hover:shadow-xl transition-all"
               >
-                <p className="text-gray-700 font-medium break-all">
+                <p className="text-gray-700 font-medium mb-2 break-words">
                   <span className="text-sm text-gray-500">Original:</span><br />
                   {url.long_url}
                 </p>
 
-                <div className="flex items-center justify-between mt-2">
+                <div className="flex flex-wrap items-center justify-between mt-2 gap-2">
                   <a
-                    href={`http://localhost:5000/s/${url.short_id}`}
+                    href={`${API}/url/s/${url.short_id}`}
                     target="_blank"
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 hover:underline break-all"
                   >
-                    Short: http://localhost:5000/s/{url.short_id}
+                    Short: {API}/url/s/{url.short_id}
                   </a>
+
                   <button
-                    onClick={() => copyToClipboard(`http://localhost:5000/s/${url.short_id}`)}
-                    className="text-sm px-2 py-1 bg-gray-800 text-white rounded hover:bg-gray-900"
+                    onClick={() => copyToClipboard(`${API}/url/s/${url.short_id}`)}
+                    className="text-sm px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-900 transition"
                   >
                     Copy
                   </button>
                 </div>
 
-                <div className="text-sm text-gray-600 mt-1 flex justify-between">
+                <div className="text-sm text-gray-600 mt-3 flex justify-between flex-wrap">
                   <span>Clicks: {url.clicks}</span>
                   <span>
-                    Created: {new Date(url.created_at).toLocaleDateString("en-IN", {
+                    Created:{" "}
+                    {new Date(url.created_at).toLocaleDateString("en-IN", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",

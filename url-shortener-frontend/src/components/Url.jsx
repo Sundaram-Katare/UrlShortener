@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
-
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
 const colors = ['#009a0a', '#fb1717ff'];
 
@@ -36,15 +35,14 @@ const Url = () => {
       let ss = res.data.shortUrl.slice(24);
       setShortUrl(`${API_BASE}/url/s/${ss}`);
       setSecurityScore(res.data.securityScore);
-      toast.success(`Safe Percentage: ${securityScore}`, {
-        position: 'top-center', // Centered at the top
+      toast.success(`Safe Percentage: ${res.data.securityScore}%`, {
+        position: 'top-center',
         style: {
-          fontSize: '1.25rem', // Bigger text
-          background: '#000000ff', // Custom green background (you can change this)
-          color: '#ffffffff', // Text color
-          padding: '1rem 1.5rem', // More padding
-          borderRadius: '0.75rem', // Rounded corners
-          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.1)', // Subtle shadow
+          fontSize: '1.25rem',
+          background: '#000',
+          color: '#fff',
+          padding: '1rem 1.5rem',
+          borderRadius: '0.75rem',
         },
       });
       setData([
@@ -66,7 +64,6 @@ const Url = () => {
     }
   };
 
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
     toast.success("Copied to Clipboard");
@@ -78,10 +75,12 @@ const Url = () => {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full grid grid-cols-2 gap-30 mx-auto px-6 py-16 mt-20 bg-gradient-to-br from-black via-black to-purple-600"
+        id='url'
+        className="w-full grid grid-cols-1 lg:grid-cols-2 gap-10 px-4 md:px-10 py-16 bg-gradient-to-br from-black to-gray-800"
       >
-        <div className="bg-inherit rounded-3xl p-10 sm:p-30">
-          <h2 className="text-4xl font-bold text-white mb-8 text-center">
+        {/* Form Section */}
+        <div className="p-6 sm:p-10 rounded-3xl bg-inherit">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
             🔗 Shorten a Long URL Instantly
           </h2>
 
@@ -90,7 +89,7 @@ const Url = () => {
               e.preventDefault();
               handleShorten();
             }}
-            className="bg-white rounded-xl p-6 sm:p-8 space-y-6 shadow-md max-w-3xl mx-auto"
+            className="bg-white rounded-xl p-6 sm:p-8 space-y-6 shadow-md"
           >
             <div>
               <label className="block text-gray-800 font-medium mb-2">
@@ -135,7 +134,7 @@ const Url = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="mt-8 bg-white rounded-2xl shadow-xl p-6 space-y-4 max-w-2xl mx-auto"
+              className="mt-8 bg-white rounded-2xl shadow-xl p-6 space-y-4"
             >
               <h3 className="text-xl font-semibold text-gray-800">Your Short URL:</h3>
               <p
@@ -161,29 +160,31 @@ const Url = () => {
           )}
         </div>
 
-        <div className="mt-12 flex lg:flex flex-col items-center justify-between gap-12">
-          <div className="text-white text-4xl font-semibold text-center lg:text-left">
+        {/* Chart Section */}
+        <div className="flex flex-col items-center justify-center space-y-8 mt-10 lg:mt-0">
+          <div className="text-white text-3xl md:text-4xl font-semibold text-center">
             🛡️ URL Security Score
           </div>
-          <div className="flex justify-center">
-            <PieChart width={300} height={300}>
-              <Pie
-                data={data}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={100}
-                label
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </div>
+          <PieChart width={250} height={250} className="mx-auto">
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              outerRadius={100}
+              label
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
         </div>
       </motion.div>
-      <h2 className='text-xl text-white text-center bg-black'>Made with ❤️ by Sundaram Katare</h2>
+
+      <h2 className='text-md sm:text-lg text-white text-center py-4 bg-gradient-to-t from-black to-gray-800'>
+        Made with ❤️ by Sundaram Katare
+      </h2>
     </>
   );
 };
