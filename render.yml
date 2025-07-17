@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: urlshortener-backend
+    env: node
+    plan: free
+    buildCommand: cd url-shortener-backend && npm install
+    startCommand: cd url-shortener-backend && node server.js
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        value: <your-neondb-url>
+      - key: JWT_SECRET
+        value: <your-jwt-secret>
+    autoDeploy: true
+
+  - type: web
+    name: urlshortener-frontend
+    env: static
+    plan: free
+    buildCommand: cd url-shortener-frontend && npm install && npm run build
+    staticPublishPath: url-shortener-frontend/dist
+    envVars:
+      - key: VITE_API_BASE
+        value: https://urlshortener-backend.onrender.com
