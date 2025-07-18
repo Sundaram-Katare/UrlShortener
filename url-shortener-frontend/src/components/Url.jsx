@@ -32,8 +32,8 @@ const Url = () => {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         }
       );
-      let ss = res.data.shortUrl.slice(24);
-      setShortUrl(`${API_BASE}/url/s/${ss}`);
+      const shortPath = new URL(res.data.shortUrl).pathname.split('/').pop();
+      setShortUrl(`${API_BASE}/url/s/${shortPath}`);
       setSecurityScore(res.data.securityScore);
       toast.success(`Safe Percentage: ${res.data.securityScore}%`, {
         position: 'top-center',

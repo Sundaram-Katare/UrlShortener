@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { FaHistory } from "react-icons/fa";
 
 const API = import.meta.env.VITE_API_BASE || "http://localhost:5000/api";
-const API_BASE = import.meta.env.VITE_CLIENT_BASE || "http://localhost:5000";
 
 export default function Dashboard() {
   const { token } = useAuth();
