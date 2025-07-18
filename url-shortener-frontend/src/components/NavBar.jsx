@@ -25,7 +25,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="text-xl font-bold">
           <h1 className="text-3xl md:text-5xl font-extrabold bg-black text-transparent bg-clip-text bg-gradient-to-r from-white to-white">
-            Nano<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-800 to-purple-500">Link</span>
+            Safe<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-500">.Linkrr</span>
           </h1>
         </Link>
 
