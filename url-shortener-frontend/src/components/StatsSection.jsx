@@ -13,23 +13,22 @@ function StatsSection() {
         .catch(err => console.error("Failed to fetch count", err));
     };
 
-    fetchCount(); 
+    fetchCount();
     const interval = setInterval(fetchCount, 10000);
 
-    return () => clearInterval(interval); 
+    return () => clearInterval(interval);
   }, []);
 
-    return (
-        <div className="w-full max-w-sm mx-auto p-4 bg-gradient-to-r from-green-300/30 to-blue-300/30 rounded-2xl shadow-md transition-transform transform hover:scale-105">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 text-center">
-                Total URLs Shortened
-            </h2>
-            <p className="text-4xl sm:text-5xl font-bold text-blue-600 mt-3 text-center">
-                {totalCount}
-            </p>
-        </div>
-
-    );
+  return (
+    <div className="w-full max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto px-4 py-6 sm:px-6 sm:py-8 bg-gradient-to-r from-green-300/30 to-blue-300/30 rounded-2xl shadow-md transform transition-transform hover:scale-105">
+      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 text-center">
+        Total URLs Shortened
+      </h2>
+      <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-600 mt-4 text-center">
+        {totalCount}
+      </p>
+    </div>
+  );
 }
 
 export default StatsSection;
