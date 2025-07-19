@@ -3,6 +3,7 @@ import NavBar from "./NavBar";
 import { motion } from "framer-motion";
 import FeatureSlideshow from "./FeatureSlideShow";
 import Url from "./Url";
+import StatsSection from "./StatsSection";
 
 const Home = () => {
   return (
@@ -31,11 +32,14 @@ const Home = () => {
             on socials, managing campaigns, and boosting engagement.
           </p>
 
+          <div className="flex gap-10">
           <a href="#url">
             <button className="bg-gradient-to-r from-black to-gray-700 text-white mt-6 px-8 py-2 text-lg sm:text-xl rounded-xl font-bold hover:bg-white hover:text-black transition duration-300">
               Start
             </button>
           </a>
+          <StatsSection />
+          </div>
         </div>
 
         <div className="flex justify-center mt-10 md:mt-0">
