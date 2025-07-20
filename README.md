@@ -2,15 +2,10 @@
 
 A full-stack web application that lets users shorten URLs with added security — unsafe/malicious URLs are flagged and blocked using Google's Safe Browsing API.
 
-Live Demo: [**Hosted on Render**](https://url-shortener-lime-two.vercel.app/)
+Live Demo: [**Hosted on Vercel**](https://url-shortener-lime-two.vercel.app/)
 
 ## 📷 Screenshots
 <img width="1890" height="900" alt="image" src="https://github.com/user-attachments/assets/b22b3f9a-b418-4bc8-9156-b2079f2be6cf" />
-
-
----
-
-## 📁 Folder Structure
 
 
 ---
