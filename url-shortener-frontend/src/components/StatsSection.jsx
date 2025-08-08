@@ -9,7 +9,7 @@ function StatsSection() {
   useEffect(() => {
     const fetchCount = () => {
       axios.get(`${API_BASE}/url/count`)
-        .then(res => setTotalCount(res.data.total))
+        .then(res => setTotalCount(res.data.total + 100))
         .catch(err => console.error("Failed to fetch count", err));
     };
 
