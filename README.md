@@ -5,7 +5,7 @@ A full-stack web application that lets users shorten URLs with added security â€
 Live Demo: [**Hosted on Vercel**](https://url-shortener-lime-two.vercel.app/)
 
 ## ðŸ“· Screenshots
-<img width="1904" height="909" alt="image" src="https://github.com/user-attachments/assets/e003fd57-2678-43a4-8ab7-8a6e7e9cc69e" />
+<img width="1900" height="911" alt="image" src="https://github.com/user-attachments/assets/95ef55cb-1fba-4dea-935a-6ee9cd9509d1" />
 
 
 ---
