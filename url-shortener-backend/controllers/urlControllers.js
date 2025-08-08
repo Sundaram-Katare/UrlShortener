@@ -85,7 +85,7 @@ export const countUrls = async (req, res) => {
     try {
     const result = await pool.query('SELECT COUNT(*) FROM urls');
     const count = result.rows[0].count;
-    res.json({ total: parseInt(count) });
+    res.json({ total: parseInt(count) + 100});
   } catch (err) {
     console.error('Error fetching total URL count:', err);
     res.status(500).json({ error: 'Server error' });

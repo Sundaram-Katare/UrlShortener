@@ -20,13 +20,13 @@ function StatsSection() {
   }, []);
 
   return (
-    <div className="w-full max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto px-4 py-6 sm:px-6 sm:py-8 bg-gradient-to-r from-green-300/30 to-blue-300/30 rounded-2xl shadow-md transform transition-transform hover:scale-105">
-      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 text-center">
-        Total URLs Shortened
-      </h2>
-      <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-blue-600 mt-4 text-center">
-        {totalCount}
+    <div className="w-full max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto px-4 py-6 sm:px-6 sm:py-8 bg-white hover:scale-105">
+      <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-purple-600 mt-4 text-center">
+        {totalCount}+
       </p>
+      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 text-center">
+        URLs Shortened
+      </h2>
     </div>
   );
 }
